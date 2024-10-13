@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.regex.*;
 
 public class SyntaxChecker {
     public static void main(String[] args){
@@ -42,6 +43,147 @@ public class SyntaxChecker {
         }else{
             System.out.println("Invalid initialization assignment");
         }
+        
+        // _________________________________________________________________________________
+        // ewan kay kirk
+
+        String varName = "([a-zA-Z_][a-zA-Z0-9_]*)?";
+        String num = "(\\d+)?";
+        String condition = "(<|>|==|!=|<=|>=|.{1,2})?";
+        String incOrDec = "(\\+\\+|--|.{1,2})?";
+
+        String initializationPattern = "\\s*((int)?\\s*" + varName + "\\s*(=|.)?\\s*" + num + ")?\\s*";
+        String conditionPattern = "\\s*(" + varName + "\\s*" + condition + "\\s*" + num + ")?\\s*";
+        String advancementPattern = "\\s*(" + varName + incOrDec + ")\\s*";
+
+        String forBody = "([^}]*)?";
+        
+        Pattern forPattern = Pattern.compile(
+            "(for|.{0,3})?\\s*(\\(|.)?"+ 
+            initializationPattern + "(;|.)?" + 
+            conditionPattern + "(;|.)?" + 
+            advancementPattern + "(\\)|.)?" + "\\s*(\\{|.)?\\s*" +
+            forBody + "\\s*(\\}|.)?"
+            );
+        
+        /* INDEXES
+        *  0 = *entire string*
+        *  1 = for 
+        *  2 = (
+        *  3 = *initialization pattern*
+        *      4 = int     , optional
+        *      5 = *variable name*
+        *      6 = =
+        *      7 = *number*
+        *  8 = ;
+        *  9 = *condition pattern*
+        *      10 = *variable name*
+        *      11 = *conditional operator*
+        *      12 = *number*
+        *  13 = ;
+        *  14 = *advancement pattern*
+        *      15 = *variable name*
+        *      16 = *increment or decrement*
+        *  17 = )
+        *  18 = {
+        *  19 = *for loop body*
+        *  20 = }
+        */
+
+        /*  
+        *  pwede i-compare mga indices na 'to if tama ung symbols na gamit
+        *  kaso up to kung ilang chanracters lng ung tamang value
+        *  
+        *  1, 2, 4, 6, 8, 11, 13, 16, 17, 18, 20
+        * 
+        *  ex. 1 = for
+        *      pwede pang detect ng misspelling like far, fer, fir
+        *      pero pag fors, mapupunta ung s sa next matching pattern.
+        * 
+        */
+
+        String input = sample;
+
+        System.out.println("______________\newan kay kirk");
+        try{
+            Matcher matcher = forPattern.matcher(input);
+            //System.out.println("match?: " + matcher.matches());
+            for(int x = 1; x <= matcher.groupCount(); x++){
+                System.out.print("[" + x + "]");
+                System.out.print(matcher.group(x) + "...should be ");
+                switch (x){
+                    case(1):
+                        System.out.println("'for'");
+                        break;
+                    case(2):
+                        System.out.println("'('");
+                        break;
+                    case(3):
+                        System.out.println("*initialization*");
+                        break;
+                    case(4):
+                        System.out.println("int (optional)");
+                        break;
+                    case(5):
+                        System.out.println("var name");
+                        break;
+                    case(6):
+                        System.out.println("'='");
+                        break;
+                    case(7):
+                        System.out.println("number");
+                        break;
+                    case(8):
+                        System.out.println("';'");
+                        break;
+                    case(9):
+                        System.out.println("condition");
+                        break;
+                    case(10):
+                        System.out.println("var name");
+                        break;
+                    case(11):
+                        System.out.println(">|<|==|!=|<=|>=");
+                        break;
+                    case(12):
+                        System.out.println("number");
+                        break;
+                    case(13):
+                        System.out.println("';'");
+                        break;
+                    case(14):
+                        System.out.println("advancement");
+                        break;
+                    case(15):
+                        System.out.println("var name");
+                        break;
+                    case(16):
+                        System.out.println("++|--");
+                        break;
+                    case(17):
+                        System.out.println("')'");
+                        break;
+                    case(18):
+                        System.out.println("'{'");
+                        break;
+                    case(19):
+                        System.out.println("for loop body");
+                        break;
+                    case(20):
+                        System.out.println("'}'");
+                        break;
+                }
+            }
+        }
+        catch(IllegalStateException e){
+            System.out.println("does not follow (kirk's) syntax");
+            return;
+        }
+
+        System.out.println("ewan kay kirk\n___________________");
+        // ewan kay kirk
+        // _________________________________________________________________________________
+
     }
 
     public static String[] tokenizer(String input){
