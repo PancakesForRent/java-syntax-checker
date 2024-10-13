@@ -3,10 +3,12 @@ import java.util.Arrays;
 public class SyntaxChecker {
     public static void main(String[] args){
         String sample = "for ( int i = 2 ; i > 0 ; i-- )  { System.out.prinn ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
+        System.out.println("sample input: " + sample + "\n");
+        System.out.println("running syntax checks...\n\n");
         String[] sampleToken = tokenizer(sample);
-        for(String i: sampleToken){
-            System.out.println(i);
-        }
+        // for(String i: sampleToken){
+        //     System.out.println(i);
+        // }
         boolean forBodyCheckStatus = forBodyCheck(sampleToken);
         boolean validDelimStatus = validDelimiterCheck(sampleToken);
         boolean printStatementSyntaxStatus = printStatementSyntaxCheck(sampleToken);
