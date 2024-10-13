@@ -2,22 +2,37 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
     public static void main(String[] args){
-        String sample = "for ( int i = 9 ; i > 0 ; i-- )  { System.out.println ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
+        String sample = "for ( int i ; i > 0 ; i-- )  { System.out.prinn ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
         String[] sampleToken = tokenizer(sample);
-        // for(String i: sampleToken){
-        //     System.out.println(i);
-        // }
+        for(String i: sampleToken){
+            System.out.println(i);
+        }
         boolean forBodyCheckStatus = forBodyCheck(sampleToken);
-        boolean validDelimCountStatus = validDelimiterCountCheck(sampleToken);
+        boolean validDelimStatus = validDelimiterCheck(sampleToken);
+        boolean printStatementSyntaxStatus = printStatementSyntaxCheck(sampleToken);
+        boolean forLoopPartCheckStatus = forLoopPartCheck(sampleToken);
+
+
+        // Mas maigi na separate checks sila HAHA tas magkasama nalang sa sample run since working sample (no errors) naman don
         if(forBodyCheckStatus){
             System.out.println("Correct for-loop body");
         }else{
             System.out.println("Incorrect for-loop body");
         }
-        if(validDelimCountStatus){
-            System.out.println("Correct number of open-closed delimiters");
+        if(validDelimStatus){
+            System.out.println("Valid open-closed delimiters");
         }else{
-            System.out.println("Incorrect number of open-closed delimiters");
+            System.out.println("Invalid open-closed delimiters");
+        }
+        if(printStatementSyntaxStatus){
+            System.out.println("Correct syntax of print statement.");
+        }else{
+            System.out.println("Incorrect syntax of print statement.");
+        }
+        if(forLoopPartCheckStatus){
+            System.out.println("Contains initialization, condition, and update block");
+        }else{
+            System.out.println("Missing/Incorrect initialization, condition, or update block");
         }
     }
 
@@ -101,7 +116,32 @@ public class SyntaxChecker {
         return forCheck && forParenCheck && forCurlCheck && (semiColonCount == 2);
     }
 
-    public static boolean validDelimiterCountCheck(String[] tokenizedStrings){
+    public static boolean printStatementSyntaxCheck(String[] tokenizedStrings){
+        boolean printStatementCheck = true;
+        for(int i = 1; i < tokenizedStrings.length-3;i++){
+            if(tokenizedStrings[i].equals("openParen") && tokenizedStrings[i+1].equals("string") && tokenizedStrings[i+2].equals("closeParen")){
+                if(tokenizedStrings[i-1].equals("unknown")){
+                    printStatementCheck = false;
+                    break;
+                }
+            }
+        }
+
+        return printStatementCheck;
+    }
+
+    public static boolean forLoopPartCheck(String[] tokenizedString){
+        String[] tokenCheck = {"openParen", "intType", "variable", "assign", "integer", "semiCol",
+    "variable", "comparisonOptr", "integer", "semiCol", "decVar", "closeParen"};
+        for(int i = 1; i < 13; i++){
+            if(!tokenizedString[i].equals(tokenCheck[i-1])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean validDelimiterCheck(String[] tokenizedStrings){
         int openDelimCount = 0;
         int closeDelimCount = 0;
         for(int i = 0; i < tokenizedStrings.length; i++){
