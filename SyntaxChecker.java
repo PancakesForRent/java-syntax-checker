@@ -43,7 +43,7 @@ public class SyntaxChecker {
         }else{
             System.out.println("Invalid initialization assignment");
         }
-        
+
         // _________________________________________________________________________________
         // ewan kay kirk
 
@@ -63,7 +63,7 @@ public class SyntaxChecker {
             initializationPattern + "(;|.)?" + 
             conditionPattern + "(;|.)?" + 
             advancementPattern + "(\\)|.)?" + "\\s*(\\{|.)?\\s*" +
-            forBody + "\\s*(\\}|.)?"
+            forBody + "(\\}|.)?"
             );
         
         /* INDEXES
@@ -107,7 +107,7 @@ public class SyntaxChecker {
         System.out.println("______________\newan kay kirk");
         try{
             Matcher matcher = forPattern.matcher(input);
-            //System.out.println("match?: " + matcher.matches());
+            System.out.println("match?: " + matcher.matches());
             for(int x = 1; x <= matcher.groupCount(); x++){
                 System.out.print("[" + x + "]");
                 System.out.print(matcher.group(x) + "...should be ");
