@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
     public static void main(String[] args){
-        String sample = "for ( int i ; i > 0 ; i-- )  { System.out.prinn ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
+        String sample = "for ( int i = 2 ; i > 0 ; i-- )  { System.out.prinn ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
         String[] sampleToken = tokenizer(sample);
         for(String i: sampleToken){
             System.out.println(i);
@@ -11,6 +11,7 @@ public class SyntaxChecker {
         boolean validDelimStatus = validDelimiterCheck(sampleToken);
         boolean printStatementSyntaxStatus = printStatementSyntaxCheck(sampleToken);
         boolean forLoopPartCheckStatus = forLoopPartCheck(sampleToken);
+        boolean initAssignCheckStatus = initAssignCheck(sampleToken);
 
 
         // Mas maigi na separate checks sila HAHA tas magkasama nalang sa sample run since working sample (no errors) naman don
@@ -25,14 +26,19 @@ public class SyntaxChecker {
             System.out.println("Invalid open-closed delimiters");
         }
         if(printStatementSyntaxStatus){
-            System.out.println("Correct syntax of print statement.");
+            System.out.println("Correct syntax of print statement");
         }else{
-            System.out.println("Incorrect syntax of print statement.");
+            System.out.println("Incorrect syntax of print statement");
         }
         if(forLoopPartCheckStatus){
             System.out.println("Contains initialization, condition, and update block");
         }else{
             System.out.println("Missing/Incorrect initialization, condition, or update block");
+        }
+        if(initAssignCheckStatus){
+            System.out.println("Valid initialization assignment");
+        }else{
+            System.out.println("Invalid initialization assignment");
         }
     }
 
@@ -100,6 +106,16 @@ public class SyntaxChecker {
 
         }
         return tokenizedStrings;
+    }
+
+    public static boolean initAssignCheck(String[] tokenizedStrings){
+        String[] tokenCheck = {"intType", "variable", "assign", "integer"};
+        for(int i = 2; i < 6; i++){
+            if(!tokenizedStrings[i].equals(tokenCheck[i-2])){
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean forBodyCheck(String[] tokenizedStrings){
