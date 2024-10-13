@@ -2,10 +2,22 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
     public static void main(String[] args){
-        String sample = "for ( int i = 9 ; i > 0 ; i-- ) { System.out.println ( \"hello\" ) ; }";
+        String sample = "for ( int i = 9 ; i > 0 ; i-- )  { System.out.println ( \"hello\" ) ; System.out.print ( \"hi\" ) ; }";
         String[] sampleToken = tokenizer(sample);
-        for(String i: sampleToken){
-            System.out.println(i);
+        // for(String i: sampleToken){
+        //     System.out.println(i);
+        // }
+        boolean forBodyCheckStatus = forBodyCheck(sampleToken);
+        boolean validDelimCountStatus = validDelimiterCountCheck(sampleToken);
+        if(forBodyCheckStatus){
+            System.out.println("Correct for-loop body");
+        }else{
+            System.out.println("Incorrect for-loop body");
+        }
+        if(validDelimCountStatus){
+            System.out.println("Correct number of open-closed delimiters");
+        }else{
+            System.out.println("Incorrect number of open-closed delimiters");
         }
     }
 
@@ -73,5 +85,33 @@ public class SyntaxChecker {
 
         }
         return tokenizedStrings;
+    }
+
+    public static boolean forBodyCheck(String[] tokenizedStrings){
+        boolean forCheck = (tokenizedStrings[0].equals("for"));
+        boolean forParenCheck = (tokenizedStrings[1].equals("openParen") && tokenizedStrings[12].equals("closeParen"));
+        boolean forCurlCheck = (tokenizedStrings[13].equals("openCurl") && tokenizedStrings[tokenizedStrings.length-1].equals("closeCurl"));
+        int semiColonCount = 0;
+        for(int i = 0; i < Arrays.asList(tokenizedStrings).indexOf("closeParen"); i++){
+            if(tokenizedStrings[i].equals("semiCol")){
+                semiColonCount++;
+            }
+        }
+        
+        return forCheck && forParenCheck && forCurlCheck && (semiColonCount == 2);
+    }
+
+    public static boolean validDelimiterCountCheck(String[] tokenizedStrings){
+        int openDelimCount = 0;
+        int closeDelimCount = 0;
+        for(int i = 0; i < tokenizedStrings.length; i++){
+            if(tokenizedStrings[i].equals("openParen") || tokenizedStrings[i].equals("openCurl")){
+                openDelimCount++;
+            }else if(tokenizedStrings[i].equals("closeParen") || tokenizedStrings[i].equals("closeCurl")){
+                closeDelimCount++;
+            }
+        }
+
+        return (openDelimCount == closeDelimCount);
     }
 }
