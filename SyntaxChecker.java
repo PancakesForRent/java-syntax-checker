@@ -45,6 +45,9 @@ public class SyntaxChecker {
     }
 
     public static String[] tokenizer(String input){
+        input = input.replace("(", " ( ").replace(")", " ) ")
+                .replace("{", " { ").replace("}", " } ")
+                .replace(";", " ; ");
         String[] untokenizedStrings = input.trim().split("\\s+");
         String[] tokenizedStrings = new String[untokenizedStrings.length];
         for(int i = 0; i < tokenizedStrings.length; i++){
