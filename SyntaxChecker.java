@@ -137,18 +137,22 @@ public class SyntaxChecker {
         return forCheck && forParenCheck && forCurlCheck && (semiColonCount == 2);
     }
 
-    public static boolean printStatementSyntaxCheck(String[] tokenizedStrings){
-        boolean printStatementCheck = true;
-        for(int i = 1; i < tokenizedStrings.length-3;i++){
-            if(tokenizedStrings[i].equals("openParen") && tokenizedStrings[i+1].equals("string") && tokenizedStrings[i+2].equals("closeParen")){
-                if(tokenizedStrings[i-1].equals("unknown")){
-                    printStatementCheck = false;
-                    break;
+    public static boolean printStatementSyntaxCheck(String[] tokenizedStrings) {
+        for (int i = 0; i < tokenizedStrings.length - 1; i++) {
+            // Check if this token is a print statement
+            if (tokenizedStrings[i].equals("printStmt")) {
+                if (i + 4 < tokenizedStrings.length
+                        && tokenizedStrings[i + 1].equals("openParen")
+                        && tokenizedStrings[i + 2].equals("string")
+                        && tokenizedStrings[i + 3].equals("closeParen")
+                        && tokenizedStrings[i + 4].equals("semiCol")) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
         }
-
-        return printStatementCheck;
+        return false;
     }
 
     public static boolean forLoopPartCheck(String[] tokenizedString){
