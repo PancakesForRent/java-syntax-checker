@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
     public static void main(String[] args) {
-        String sample = "for ( int i = 0 ; i > 10 ; i++ ) { System.out.print(\"string\"); variable = \"message\"; }";
+        String sample = "for( int j = 0 ; i > 10 ; i++) { System.out.print(i); variable = \"message\";}";
         System.out.println("sample input: " + sample + "\n");
         System.out.println("running syntax checks...\n\n");
         String[] sampleToken = tokenizer(sample);
@@ -16,7 +16,8 @@ public class SyntaxChecker {
         boolean initAssignCheckStatus = initAssignCheck(sampleToken);
         boolean assignmenntStatementSyntaxStatus = assignmentStatementSyntaxCheck(sampleToken);
 
-        
+        // Mas maigi na separate checks sila HAHA tas magkasama nalang sa sample run
+        // since working sample (no errors) naman don
         if (forBodyCheckStatus) {
             System.out.println("Correct for-loop body");
         } else {
