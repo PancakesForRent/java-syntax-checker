@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
     public static void main(String[] args) {
-        String sample = "for( int j = 0 ; i > 10 ; i++) {System.out.print(i); variable = \"message\";}";
+        String sample = "for( int j = 0 ; i > 10 ; i++) { System.out.print(i); variable = \"message\";}";
         System.out.println("sample input: " + sample + "\n");
         System.out.println("running syntax checks...\n\n");
         String[] sampleToken = tokenizer(sample);
@@ -16,8 +16,7 @@ public class SyntaxChecker {
         boolean initAssignCheckStatus = initAssignCheck(sampleToken);
         boolean assignmenntStatementSyntaxStatus = assignmentStatementSyntaxCheck(sampleToken);
 
-        // Mas maigi na separate checks sila HAHA tas magkasama nalang sa sample run
-        // since working sample (no errors) naman don
+        
         if (forBodyCheckStatus) {
             System.out.println("Correct for-loop body");
         } else {
@@ -151,7 +150,7 @@ public class SyntaxChecker {
             if (tokenizedStrings[i].equals("printStmt")) {
                 if (i + 4 < tokenizedStrings.length
                         && tokenizedStrings[i + 1].equals("openParen")
-                        && tokenizedStrings[i + 2].equals("string")
+                        && (tokenizedStrings[i + 2].equals("string")||tokenizedStrings[i+2].equals("variable"))
                         && tokenizedStrings[i + 3].equals("closeParen")
                         && tokenizedStrings[i + 4].equals("semiCol")) {
                     return true;
